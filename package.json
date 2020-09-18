@@ -4,7 +4,8 @@
   "description": "guess-mind game using nodeJS with socketIO",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/server.js"
+    "dev:server": "nodemon --exec babel-node src/server.js --ignore src/assets --ignore src/static",
+    "dev:assets": "gulp"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,16 @@
     "@babel/core": "^7.11.6",
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.11.5",
+    "babelify": "^10.0.0",
+    "del": "^5.1.0",
     "express": "^4.17.1",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-csso": "^4.0.1",
+    "gulp-sass": "^4.1.0",
+    "morgan": "^1.10.0",
+    "node-sass": "^4.14.1",
     "pug": "^3.0.0",
     "socket.io": "^2.3.0"
   }
