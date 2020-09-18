@@ -7,7 +7,7 @@ const LOGGED_IN = "loggedIn";
 
 const logIn = (nickname) => {
   const socket = io("/");
-  socket.emit("setNickname", { nickname });
+  socket.emit(window.events.setNickname, { nickname });
 };
 
 const handleSubmitLogin = (e) => {
