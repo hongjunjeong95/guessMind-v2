@@ -1,3 +1,5 @@
+const { initSocket } = require("./sockets");
+
 const body = document.querySelector("body");
 const loginForm = document.getElementById("jsLogin");
 
@@ -8,6 +10,7 @@ const LOGGED_IN = "loggedIn";
 const logIn = (nickname) => {
   const socket = io("/");
   socket.emit(window.events.setNickname, { nickname });
+  initSocket(socket);
 };
 
 const handleSubmitLogin = (e) => {

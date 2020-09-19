@@ -3,6 +3,7 @@ import { join } from "path";
 import morgan from "morgan";
 import socketIO from "socket.io";
 import socketController from "./socketController";
+import events from "./events";
 
 const app = express();
 const PORT = 4000;
@@ -13,7 +14,9 @@ app.use(express.static(join(__dirname, "static")));
 
 app.use(morgan("dev"));
 
-app.get("/", (req, res) => res.render("home"));
+app.get("/", (req, res) =>
+  res.render("home", { events: JSON.stringify(events) })
+);
 
 const handleListening = () => {
   console.log(`✅ Listening : http://localhost:${PORT}`);
