@@ -82,13 +82,25 @@ const handleClickColor = (e) => {
   ctx.lineWidth = boldRange.value;
 };
 
-const handleInputRangeFill = (e) => {
+const handleInputRangePencil = (e) => {
   const size = e.target.value;
   ctx.lineWidth = size;
 };
 
+const fill = (color = null) => {
+  let currentColor = ctx.fillStyle;
+  if (color !== null) {
+    ctx.fillStyle = color;
+  }
+  ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  ctx.fillStyle = currentColor;
+};
+
 const handleClickFill = () => {
-  if (filling) ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  if (filling) {
+    fill();
+    getSocket().emit(window.events.fill, { color: ctx.strokeStyle });
+  }
 };
 
 const handleClickMode = () => {
@@ -133,7 +145,7 @@ if (canvas) {
     color.addEventListener("click", handleClickColor)
   );
 
-  boldRange.addEventListener("input", handleInputRangeFill);
+  boldRange.addEventListener("input", handleInputRangePencil);
   mode.addEventListener("click", handleClickMode);
   eraser.addEventListener("click", handleClickEraser);
   eraserRange.addEventListener("input", handleInputRangeEraser);
@@ -141,5 +153,5 @@ if (canvas) {
 }
 
 export const handleBeganPath = ({ x, y }) => beginPath(x, y);
-
 export const handleStrokedPath = ({ x, y, color }) => strokePath(x, y, color);
+export const handleFilled = ({ color }) => fill(color);
