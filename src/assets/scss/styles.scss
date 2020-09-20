@@ -6,6 +6,7 @@
 @import "./login.scss";
 @import "./notifications.scss";
 @import "./chat.scss";
+@import "./paint.scss";
 
 * {
   box-sizing: border-box;
@@ -27,6 +28,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100%;
+  background-color: #f6f9fc;
   .loginBox,
   .gameContainer {
     display: none;
