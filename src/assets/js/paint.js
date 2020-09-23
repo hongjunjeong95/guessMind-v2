@@ -23,9 +23,10 @@ canvas.height = CANVAS_SIZE;
 ctx.lineWidth = INITIAL_LINE_WIDTH;
 ctx.strokeStyle = INITIAL_COLOR;
 
-const beginPath = (x, y) => {
+const beginPath = (x, y, size) => {
   ctx.beginPath();
   ctx.moveTo(x, y);
+  ctx.lineWidth = size;
 };
 
 const strokePath = (x, y, color = null) => {
@@ -41,9 +42,10 @@ const strokePath = (x, y, color = null) => {
 const handleMousemove = (e) => {
   const x = e.offsetX;
   const y = e.offsetY;
+
   if (!painting) {
     beginPath(x, y);
-    getSocket().emit(window.events.beginPath, { x, y });
+    getSocket().emit(window.events.beginPath, { x, y, size: ctx.lineWidth });
   } else {
     strokePath(x, y);
     getSocket().emit(window.events.strokePath, {
@@ -152,6 +154,6 @@ if (canvas) {
   save.addEventListener("click", handleClickSave);
 }
 
-export const handleBeganPath = ({ x, y }) => beginPath(x, y);
+export const handleBeganPath = ({ x, y, size }) => beginPath(x, y, size);
 export const handleStrokedPath = ({ x, y, color }) => strokePath(x, y, color);
 export const handleFilled = ({ color }) => fill(color);
