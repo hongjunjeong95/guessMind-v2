@@ -7,7 +7,6 @@ const boldRange = document.getElementById("jsRangeFill");
 const mode = document.getElementById("jsMode");
 const eraser = document.getElementById("jsEraser");
 const eraserRange = document.getElementById("jsRangeEraser");
-const save = document.getElementById("jsSave");
 
 const INITIAL_COLOR = "#2c2c2c";
 const CANVAS_SIZE = 700;
@@ -76,12 +75,18 @@ const handleMouseLeave = () => {
   stopPaint();
 };
 
+const setPencil = () => {
+  ctx.globalCompositeOperation = "source-over";
+  ctx.lineWidth = boldRange.value;
+  erasing = false;
+};
+
 const handleClickColor = (e) => {
   const color = e.target.style.backgroundColor;
-  ctx.globalCompositeOperation = "source-over";
   ctx.strokeStyle = color;
   ctx.fillStyle = color;
-  ctx.lineWidth = boldRange.value;
+  setPencil();
+  getSocket().emit(window.events.setPencil);
 };
 
 const handleInputRangePencil = (e) => {
@@ -122,18 +127,16 @@ const handleInputRangeEraser = (e) => {
   }
 };
 
-const handleClickEraser = () => {
+const erase = () => {
   erasing = true;
+  filling = false;
   ctx.lineWidth = eraserRange.value;
   ctx.globalCompositeOperation = "destination-out";
 };
 
-const handleClickSave = () => {
-  const image = canvas.toDataURL();
-  const link = document.createElement("a");
-  link.href = image;
-  link.download = "PaintJS[🎨]";
-  link.click();
+const handleClickEraser = () => {
+  erase();
+  getSocket().emit(window.events.erase);
 };
 
 if (canvas) {
@@ -151,9 +154,10 @@ if (canvas) {
   mode.addEventListener("click", handleClickMode);
   eraser.addEventListener("click", handleClickEraser);
   eraserRange.addEventListener("input", handleInputRangeEraser);
-  save.addEventListener("click", handleClickSave);
 }
 
 export const handleBeganPath = ({ x, y, size }) => beginPath(x, y, size);
 export const handleStrokedPath = ({ x, y, color }) => strokePath(x, y, color);
 export const handleFilled = ({ color }) => fill(color);
+export const handleErased = () => erase();
+export const handleSetPenciled = () => setPencil();

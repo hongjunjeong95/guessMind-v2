@@ -1,6 +1,12 @@
 import { handleNewMsg } from "./chat";
 import { handleDisconnected, handleNewuser } from "./notifications";
-import { handleBeganPath, handleFilled, handleStrokedPath } from "./paint";
+import {
+  handleBeganPath,
+  handleErased,
+  handleFilled,
+  handleSetPenciled,
+  handleStrokedPath,
+} from "./paint";
 
 let socket = null;
 
@@ -15,4 +21,6 @@ export const initSocket = (aSocket) => {
   socket.on(events.beganPath, handleBeganPath);
   socket.on(events.strokedPath, handleStrokedPath);
   socket.on(events.filled, handleFilled);
+  socket.on(events.erased, handleErased);
+  socket.on(events.setPenciled, handleSetPenciled);
 };
