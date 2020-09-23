@@ -15,6 +15,7 @@ const events = {
   erased: "erased",
   setPencil: "setPencil",
   setPenciled: "setPenciled",
+  playerUpdate: "playerUpdate",
 };
 
 export default events;
