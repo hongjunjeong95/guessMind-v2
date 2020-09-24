@@ -1,7 +1,8 @@
+import { disableCanvas } from "./paint";
+
 const board = document.getElementById("jsPBoard");
 
 const addPlayers = (players) => {
-  console.log(players);
   board.innerHTML = "";
   players.forEach((player) => {
     const playerElement = document.createElement("span");
@@ -11,3 +12,6 @@ const addPlayers = (players) => {
 };
 
 export const handlePlayerUpdate = ({ sockets }) => addPlayers(sockets);
+export const handleGameStarted = () => {
+  disableCanvas();
+};

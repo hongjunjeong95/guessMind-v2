@@ -13,6 +13,7 @@ const socketController = (socket, io) => {
     sockets.push({ id: socket.id, points: 0, nickname });
     broadcast(events.newUser, { nickname });
     sendPlayerUpdate();
+    superBroadcast(events.gameStarted);
   });
   socket.on(events.disconnect, () => {
     sockets = sockets.filter((aSocket) => aSocket.id !== socket.id);

@@ -139,12 +139,28 @@ const handleClickEraser = () => {
   getSocket().emit(window.events.erase);
 };
 
-if (canvas) {
+export const handleBeganPath = ({ x, y, size }) => beginPath(x, y, size);
+export const handleStrokedPath = ({ x, y, color }) => strokePath(x, y, color);
+export const handleFilled = ({ color }) => fill(color);
+export const handleErased = () => erase();
+export const handleSetPenciled = () => setPencil();
+export const enableCanvas = () => {
   canvas.addEventListener("mousemove", handleMousemove);
   canvas.addEventListener("mousedown", handleMouseDown);
   canvas.addEventListener("mouseup", handleMouseUp);
   canvas.addEventListener("mouseleave", handleMouseLeave);
   canvas.addEventListener("click", handleClickFill);
+};
+export const disableCanvas = () => {
+  canvas.removeEventListener("mousemove", handleMousemove);
+  canvas.removeEventListener("mousedown", handleMouseDown);
+  canvas.removeEventListener("mouseup", handleMouseUp);
+  canvas.removeEventListener("mouseleave", handleMouseLeave);
+  canvas.removeEventListener("click", handleClickFill);
+};
+
+if (canvas) {
+  enableCanvas();
 
   Array.from(colors).forEach((color) =>
     color.addEventListener("click", handleClickColor)
@@ -155,9 +171,3 @@ if (canvas) {
   eraser.addEventListener("click", handleClickEraser);
   eraserRange.addEventListener("input", handleInputRangeEraser);
 }
-
-export const handleBeganPath = ({ x, y, size }) => beginPath(x, y, size);
-export const handleStrokedPath = ({ x, y, color }) => strokePath(x, y, color);
-export const handleFilled = ({ color }) => fill(color);
-export const handleErased = () => erase();
-export const handleSetPenciled = () => setPencil();
