@@ -5,6 +5,8 @@ import socketIO from "socket.io";
 import socketController from "./socketController";
 import events from "./events";
 
+import "./db";
+
 const app = express();
 const PORT = 4000;
 

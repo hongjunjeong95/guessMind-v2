@@ -14,13 +14,21 @@ const socketController = (socket, io) => {
     superBroadcast(events.playerUpdate, { sockets });
   const startGame = () => {
     superBroadcast(events.gameStarted);
-
     painter = choosePainter();
     word = chooseWord();
     io.to(painter.id).emit(events.painterNotif, { word });
   };
   const endGame = () => {
     superBroadcast(events.gameEnded);
+  };
+  const addPoints = (id) => {
+    sockets = sockets.map((socket) => {
+      if (socket.id === id) {
+        socket.points += 10;
+      }
+      return socket;
+    });
+    sendPlayerUpdate();
   };
 
   socket.on(events.setNickname, ({ nickname }) => {
@@ -37,6 +45,9 @@ const socketController = (socket, io) => {
     endGame();
   });
   socket.on(events.sendMsg, ({ message }) => {
+    if (word === message) {
+      addPoints(socket.id);
+    }
     broadcast(events.newMsg, { message, nickname: socket.nickname });
   });
   socket.on(events.beginPath, ({ x, y, size }) =>
