@@ -1,6 +1,9 @@
 import events from "./events";
 
 let sockets = [];
+let painter = [];
+
+const choosePainter = () => sockets[Math.floor(Math.random() * sockets.length)];
 
 const socketController = (socket, io) => {
   const broadcast = (event, data) => socket.broadcast.emit(event, data);
@@ -14,6 +17,8 @@ const socketController = (socket, io) => {
     broadcast(events.newUser, { nickname });
     sendPlayerUpdate();
     superBroadcast(events.gameStarted);
+    painter = choosePainter();
+    io.to(painter.id).emit(events.painterNotif);
   });
   socket.on(events.disconnect, () => {
     sockets = sockets.filter((aSocket) => aSocket.id !== socket.id);

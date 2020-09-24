@@ -1,6 +1,7 @@
-import { disableCanvas } from "./paint";
+import { disableCanvas, enableCanvas } from "./paint";
 
 const board = document.getElementById("jsPBoard");
+const notif = document.getElementById("jsNotifs");
 
 const addPlayers = (players) => {
   board.innerHTML = "";
@@ -14,4 +15,8 @@ const addPlayers = (players) => {
 export const handlePlayerUpdate = ({ sockets }) => addPlayers(sockets);
 export const handleGameStarted = () => {
   disableCanvas();
+};
+export const handlePainterNotif = () => {
+  enableCanvas();
+  notif.innerText = `You are the painter`;
 };

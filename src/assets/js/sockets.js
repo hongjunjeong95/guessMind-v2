@@ -7,7 +7,11 @@ import {
   handleSetPenciled,
   handleStrokedPath,
 } from "./paint";
-import { handleGameStarted, handlePlayerUpdate } from "./player";
+import {
+  handleGameStarted,
+  handlePlayerUpdate,
+  handlePainterNotif,
+} from "./player";
 
 let socket = null;
 
@@ -26,4 +30,5 @@ export const initSocket = (aSocket) => {
   socket.on(events.setPenciled, handleSetPenciled);
   socket.on(events.playerUpdate, handlePlayerUpdate);
   socket.on(events.gameStarted, handleGameStarted);
+  socket.on(events.painterNotif, handlePainterNotif);
 };

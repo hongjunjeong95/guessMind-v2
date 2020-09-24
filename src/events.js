@@ -17,6 +17,7 @@ const events = {
   setPenciled: "setPenciled",
   playerUpdate: "playerUpdate",
   gameStarted: "gameStarted",
+  painterNotif: "painterNotif",
 };
 
 export default events;
