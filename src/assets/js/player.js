@@ -16,7 +16,7 @@ export const handlePlayerUpdate = ({ sockets }) => addPlayers(sockets);
 export const handleGameStarted = () => {
   disableCanvas();
 };
-export const handlePainterNotif = () => {
+export const handlePainterNotif = ({ word }) => {
   enableCanvas();
-  notif.innerText = `You are the painter`;
+  notif.innerText = `You are the painter, word: ${word}`;
 };

@@ -1,7 +1,9 @@
 import events from "./events";
+import { chooseWord } from "./words";
 
 let sockets = [];
-let painter = [];
+let painter = null;
+let word = null;
 
 const choosePainter = () => sockets[Math.floor(Math.random() * sockets.length)];
 
@@ -10,15 +12,19 @@ const socketController = (socket, io) => {
   const superBroadcast = (event, data) => io.emit(event, data);
   const sendPlayerUpdate = () =>
     superBroadcast(events.playerUpdate, { sockets });
+  const startGame = () => {
+    superBroadcast(events.gameStarted);
+    sendPlayerUpdate();
+    painter = choosePainter();
+    word = chooseWord();
+    io.to(painter.id).emit(events.painterNotif, { word });
+  };
 
   socket.on(events.setNickname, ({ nickname }) => {
     socket.nickname = nickname;
     sockets.push({ id: socket.id, points: 0, nickname });
     broadcast(events.newUser, { nickname });
-    sendPlayerUpdate();
-    superBroadcast(events.gameStarted);
-    painter = choosePainter();
-    io.to(painter.id).emit(events.painterNotif);
+    startGame();
   });
   socket.on(events.disconnect, () => {
     sockets = sockets.filter((aSocket) => aSocket.id !== socket.id);
