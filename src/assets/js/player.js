@@ -20,3 +20,6 @@ export const handlePainterNotif = ({ word }) => {
   enableCanvas();
   notif.innerText = `You are the painter, word: ${word}`;
 };
+export const handleGameEnded = () => {
+  notif.innerText = "";
+};

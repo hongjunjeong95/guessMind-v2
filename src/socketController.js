@@ -14,22 +14,27 @@ const socketController = (socket, io) => {
     superBroadcast(events.playerUpdate, { sockets });
   const startGame = () => {
     superBroadcast(events.gameStarted);
-    sendPlayerUpdate();
+
     painter = choosePainter();
     word = chooseWord();
     io.to(painter.id).emit(events.painterNotif, { word });
+  };
+  const endGame = () => {
+    superBroadcast(events.gameEnded);
   };
 
   socket.on(events.setNickname, ({ nickname }) => {
     socket.nickname = nickname;
     sockets.push({ id: socket.id, points: 0, nickname });
     broadcast(events.newUser, { nickname });
+    sendPlayerUpdate();
     startGame();
   });
   socket.on(events.disconnect, () => {
     sockets = sockets.filter((aSocket) => aSocket.id !== socket.id);
     broadcast(events.disconnected, { nickname: socket.nickname });
     sendPlayerUpdate();
+    endGame();
   });
   socket.on(events.sendMsg, ({ message }) => {
     broadcast(events.newMsg, { message, nickname: socket.nickname });
