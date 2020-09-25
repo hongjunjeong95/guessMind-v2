@@ -6,6 +6,7 @@ import socketController from "./socketController";
 import events from "./events";
 
 import "./db";
+import globalRouter from "./router/globalRouter";
 
 const app = express();
 const PORT = 4000;
@@ -16,9 +17,7 @@ app.use(express.static(join(__dirname, "static")));
 
 app.use(morgan("dev"));
 
-app.get("/", (req, res) =>
-  res.render("home", { events: JSON.stringify(events) })
-);
+app.use("/", globalRouter);
 
 const handleListening = () => {
   console.log(`✅ Listening : http://localhost:${PORT}`);

@@ -1,0 +1,22 @@
+.form-container {
+  box-shadow: $boxShadow;
+  background-color: white;
+  padding: 40px;
+  border-radius: 5px;
+  form {
+    display: flex;
+    flex-direction: column;
+    .fileUpload {
+      label {
+        margin-right: 20px;
+      }
+    }
+    input:not([type="file"]) {
+      width: 100%;
+      margin: 10px 0px;
+    }
+    input[type="submit"] {
+      cursor: pointer;
+    }
+  }
+}
