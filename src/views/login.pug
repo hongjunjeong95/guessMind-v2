@@ -1,0 +1,11 @@
+extends layouts/main
+
+block content
+  .loginBox
+    form(action='/login' method="post" )#jsLogin
+      input(placeholder="What's your nickname", type="text" name="username" required)
+      input(placeholder="Password" type="password" name="password" required)
+      input(placeholder="Verify password" type="password" name="password2" required)
+      input(type="submit" value="Login")
+    button.link
+      a(href="/") Back

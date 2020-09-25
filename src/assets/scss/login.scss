@@ -12,6 +12,7 @@ input {
 
 .loginBox {
   width: 280px;
+  margin: 0 20px;
   box-shadow: $boxShadow;
   background-color: white;
   padding: 40px;
@@ -28,7 +29,8 @@ input {
       cursor: pointer;
     }
   }
-  .join__link {
+  .link {
+    width: 100%;
     padding: 10px;
     border: 0;
     background-color: $greyColor;
@@ -36,8 +38,12 @@ input {
       0 0 0 1px rgba(42, 47, 69, 0.16);
     border-radius: 5px;
     font-size: 14px;
-    text-align: center;
+    &:first-child {
+      margin-bottom: 20px;
+    }
     a {
+      display: block;
+      width: 100%;
       text-decoration: none;
       color: black;
     }

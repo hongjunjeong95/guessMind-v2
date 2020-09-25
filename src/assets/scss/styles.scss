@@ -31,18 +31,4 @@ body {
   align-items: center;
   min-height: 100%;
   background-color: #f6f9fc;
-  .loginBox,
-  .gameContainer {
-    display: none;
-  }
-  &.loggedOut {
-    .loginBox {
-      display: block;
-    }
-  }
-  &.loggedIn {
-    .gameContainer {
-      display: flex;
-    }
-  }
 }
