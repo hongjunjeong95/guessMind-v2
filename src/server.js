@@ -2,10 +2,11 @@ import express from "express";
 import { join } from "path";
 import morgan from "morgan";
 import socketIO from "socket.io";
-import socketController from "./socketController";
-import events from "./events";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 import "./db";
+import socketController from "./socketController";
 import globalRouter from "./router/globalRouter";
 
 const app = express();
@@ -14,6 +15,11 @@ const PORT = 4000;
 app.set("view engine", "pug");
 app.set("views", join(__dirname, "views"));
 app.use(express.static(join(__dirname, "static")));
+
+app.use(cookieParser());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(morgan("dev"));
 

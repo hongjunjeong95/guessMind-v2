@@ -2,12 +2,12 @@ extends layouts/main
 
 block content
   .form-container
-    form(action='/' method="post").join-form
+    form(action='/join' method="post" enctype="multipart/form-data").join-form
       .fileUpload
         label(for="avatar") Avatar
         input(type="file" name="avatar" id="avatar" accept="image/*")
-      input(type="text" placeholder="Full name" required=true name="name")
+      input(type="text" placeholder="Full name" required=true name="username")
       input(type="email" placeholder="Email" required=true name="email")
-      input(type="password" placeholder="Password" required=true name="password1")
+      input(type="password" placeholder="Password" required=true name="password")
       input(type="password" placeholder="Verify password" required=true name="password2")
       input(type="submit" value="Join now")
