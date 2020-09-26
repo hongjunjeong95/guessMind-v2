@@ -1,7 +1,7 @@
+import { logoutUser } from "./controller/globalController";
 import events from "./events";
 
 import { chooseWord } from "./words";
-import User from "./model/User";
 
 export let sockets = [];
 let painter = null;
@@ -20,9 +20,7 @@ export const socketController = (socket, io) => {
     word = chooseWord();
     io.to(painter.id).emit(events.painterNotif, { word });
   };
-  const endGame = () => {
-    superBroadcast(events.gameEnded);
-  };
+
   const addPoints = (id) => {
     sockets = sockets.map((socket) => {
       if (socket.id === id) {
@@ -33,24 +31,16 @@ export const socketController = (socket, io) => {
     sendPlayerUpdate();
   };
 
-  socket.on(events.addPlayer, async ({ username }) => {
-    const user = await User.findOne({ username });
+  socket.on(events.addPlayer, () => {
     sendPlayerUpdate();
     startGame();
   });
-  socket.on(events.disconnect, () => {
-    // console.log("This socket", socket);
-    // console.log("This sockets", sockets);
-    sockets = sockets.filter((aSocket) => aSocket.id !== socket.id);
-    broadcast(events.disconnected, { nickname: socket.nickname });
-    sendPlayerUpdate();
-    endGame();
-  });
+
   socket.on(events.sendMsg, ({ message }) => {
     if (word === message) {
       addPoints(socket.id);
     }
-    broadcast(events.newMsg, { message, nickname: socket.nickname });
+    broadcast(events.newMsg, { message, username: socket.username });
   });
   socket.on(events.beginPath, ({ x, y, size }) =>
     broadcast(events.beganPath, { x, y, size })

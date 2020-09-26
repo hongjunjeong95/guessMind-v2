@@ -5,11 +5,16 @@ import events from "../events";
 import io from "../server";
 import { sockets } from "../socketController";
 
+const superBroadcast = (event, data) => io.emit(event, data);
+const sendPlayerUpdate = () => superBroadcast(events.playerUpdate, { sockets });
+const endGame = () => {
+  superBroadcast(events.gameEnded);
+};
+
+export let logoutUser = null;
+
 export const home = async (req, res) => {
   res.render("home", { events: JSON.stringify(events), users: sockets });
-  const superBroadcast = (event, data) => io.emit(event, data);
-  const sendPlayerUpdate = () =>
-    superBroadcast(events.playerUpdate, { sockets });
 
   io.once("connection", () => {
     console.log("homenome");
@@ -66,18 +71,30 @@ export const loginNotify = async (req, res) => {
   const {
     user: { id },
   } = req;
-  res.redirect("/login");
   const user = await User.findById(id);
   const username = user.username;
 
   sockets.push({ id: user.id, points: user.points, username });
-  io.once("connection", (socket) => {
-    console.log("connection");
-    socket.broadcast.emit(events.newUser, { username });
-  });
+
+  io.emit(events.newUser, { username });
+
+  sendPlayerUpdate();
+
+  res.redirect("/login");
 };
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
+  const {
+    user: { id },
+  } = req;
+  logoutUser = await User.findById(id);
+  const itmeIdx = sockets.findIndex((aSocket) => aSocket.id === logoutUser.id);
+  if (itmeIdx > -1) sockets.splice(itmeIdx, 1);
+
+  io.emit(events.disconnected, { username: logoutUser.username });
+
+  sendPlayerUpdate();
+  endGame();
   req.logout();
   res.redirect("/");
 };
