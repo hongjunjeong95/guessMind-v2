@@ -9,6 +9,22 @@ export const localMiddleware = (req, res, next) => {
   next();
 };
 
+export const onlyPrivate = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    res.redirect("/");
+  }
+};
+
+export const onlyPublic = (req, res, next) => {
+  if (req.user) {
+    res.redirect("/");
+  } else {
+    next();
+  }
+};
+
 const multerAvatar = multer({ dest: "src/uploads/avatar" });
 
 export const uploadAvatar = multerAvatar.single("avatar");

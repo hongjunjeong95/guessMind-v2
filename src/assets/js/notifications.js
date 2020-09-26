@@ -13,9 +13,9 @@ const fireNotification = (text, color) => {
 export const handleNewuser = ({ username }) => {
   const text = `${username} just joined!`;
   const color = "rgb(0, 122, 255)";
-  console.log("hihi", username);
   fireNotification(text, color);
-  getSocket().emit(window.events.setNickname, { username });
+  console.log("HandleNewUser");
+  getSocket().emit(window.events.addPlayer, { username });
 };
 
 export const handleDisconnected = ({ nickname }) => {

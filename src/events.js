@@ -1,5 +1,5 @@
 const events = {
-  setNickname: "setNickname",
+  addPlayer: "addPlayer",
   newUser: "newUser",
   disconnect: "disconnect",
   disconnected: "disconnected",

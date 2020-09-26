@@ -3,9 +3,18 @@ import passport from "passport";
 import User from "../model/User";
 import events from "../events";
 import io from "../server";
+import { sockets } from "../socketController";
 
-export const home = (req, res) => {
-  res.render("home", { events: JSON.stringify(events) });
+export const home = async (req, res) => {
+  res.render("home", { events: JSON.stringify(events), users: sockets });
+  const superBroadcast = (event, data) => io.emit(event, data);
+  const sendPlayerUpdate = () =>
+    superBroadcast(events.playerUpdate, { sockets });
+
+  io.once("connection", () => {
+    console.log("homenome");
+    sendPlayerUpdate();
+  });
 };
 
 export const getJoin = (req, res) => {
@@ -32,7 +41,6 @@ export const postJoin = async (req, res, next) => {
       username,
       avatarUrl: file ? file.path : null,
     });
-    console.log(user);
     await User.register(user, password);
     next();
   } catch (error) {
@@ -54,20 +62,22 @@ export const postLogin = passport.authenticate("local", {
   failureRedirect: "/login",
 });
 
-export const logout = (req, res) => {
-  req.logout();
-  res.redirect("/");
-};
-
 export const loginNotify = async (req, res) => {
-  res.redirect("/login");
   const {
     user: { id },
   } = req;
+  res.redirect("/login");
   const user = await User.findById(id);
   const username = user.username;
 
-  io.on("connection", (socket) => {
+  sockets.push({ id: user.id, points: user.points, username });
+  io.once("connection", (socket) => {
+    console.log("connection");
     socket.broadcast.emit(events.newUser, { username });
   });
+};
+
+export const logout = (req, res) => {
+  req.logout();
+  res.redirect("/");
 };

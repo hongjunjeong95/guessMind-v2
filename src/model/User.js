@@ -3,7 +3,7 @@ import passportLocalMongoose from "passport-local-mongoose";
 
 const UserSchema = new mongoose.Schema({
   username: String,
-  points: Number,
+  points: { type: Number, default: 0 },
   avatarUrl: String,
 });
 

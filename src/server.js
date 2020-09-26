@@ -10,10 +10,10 @@ import mongoose from "mongoose";
 import passport from "passport";
 
 import { localMiddleware } from "./middlewares";
+import { socketController } from "./socketController";
+import globalRouter from "./router/globalRouter";
 import "./passport";
 import "./db";
-import socketController from "./socketController";
-import globalRouter from "./router/globalRouter";
 
 const app = express();
 const CookieStore = MongoStore(session);
