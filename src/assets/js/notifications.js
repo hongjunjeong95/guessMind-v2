@@ -1,3 +1,5 @@
+import { getSocket } from "./sockets";
+
 const body = document.querySelector("body");
 
 const fireNotification = (text, color) => {
@@ -8,10 +10,12 @@ const fireNotification = (text, color) => {
   body.appendChild(notification);
 };
 
-export const handleNewuser = ({ nickname }) => {
-  const text = `${nickname} just joined!`;
+export const handleNewuser = ({ username }) => {
+  const text = `${username} just joined!`;
   const color = "rgb(0, 122, 255)";
+  console.log("hihi", username);
   fireNotification(text, color);
+  getSocket().emit(window.events.setNickname, { username });
 };
 
 export const handleDisconnected = ({ nickname }) => {

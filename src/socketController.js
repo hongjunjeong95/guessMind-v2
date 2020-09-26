@@ -31,10 +31,9 @@ const socketController = (socket, io) => {
     sendPlayerUpdate();
   };
 
-  socket.on(events.setNickname, ({ nickname }) => {
-    socket.nickname = nickname;
-    sockets.push({ id: socket.id, points: 0, nickname });
-    broadcast(events.newUser, { nickname });
+  socket.on(events.setNickname, ({ username }) => {
+    // socket.username = username;
+    // sockets.push({ id: socket.id, points: 0, username });
     sendPlayerUpdate();
     startGame();
   });

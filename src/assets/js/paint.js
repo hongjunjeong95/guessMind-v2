@@ -1,6 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 import { getSocket } from "./sockets";
 
 const canvas = document.getElementById("jsCanvas");
+
 if (canvas) {
   const ctx = canvas.getContext("2d");
   const colors = document.getElementsByClassName("jsColor");
@@ -139,37 +142,37 @@ if (canvas) {
     erase();
     getSocket().emit(window.events.erase);
   };
+}
 
-  export const handleBeganPath = ({ x, y, size }) => beginPath(x, y, size);
-  export const handleStrokedPath = ({ x, y, color }) => strokePath(x, y, color);
-  export const handleFilled = ({ color }) => fill(color);
-  export const handleErased = () => erase();
-  export const handleSetPenciled = () => setPencil();
-  export const enableCanvas = () => {
-    canvas.addEventListener("mousemove", handleMousemove);
-    canvas.addEventListener("mousedown", handleMouseDown);
-    canvas.addEventListener("mouseup", handleMouseUp);
-    canvas.addEventListener("mouseleave", handleMouseLeave);
-    canvas.addEventListener("click", handleClickFill);
-  };
-  export const disableCanvas = () => {
-    canvas.removeEventListener("mousemove", handleMousemove);
-    canvas.removeEventListener("mousedown", handleMouseDown);
-    canvas.removeEventListener("mouseup", handleMouseUp);
-    canvas.removeEventListener("mouseleave", handleMouseLeave);
-    canvas.removeEventListener("click", handleClickFill);
-  };
+export const handleBeganPath = ({ x, y, size }) => beginPath(x, y, size);
+export const handleStrokedPath = ({ x, y, color }) => strokePath(x, y, color);
+export const handleFilled = ({ color }) => fill(color);
+export const handleErased = () => erase();
+export const handleSetPenciled = () => setPencil();
+export const enableCanvas = () => {
+  canvas.addEventListener("mousemove", handleMousemove);
+  canvas.addEventListener("mousedown", handleMouseDown);
+  canvas.addEventListener("mouseup", handleMouseUp);
+  canvas.addEventListener("mouseleave", handleMouseLeave);
+  canvas.addEventListener("click", handleClickFill);
+};
+export const disableCanvas = () => {
+  canvas.removeEventListener("mousemove", handleMousemove);
+  canvas.removeEventListener("mousedown", handleMouseDown);
+  canvas.removeEventListener("mouseup", handleMouseUp);
+  canvas.removeEventListener("mouseleave", handleMouseLeave);
+  canvas.removeEventListener("click", handleClickFill);
+};
 
-  if (canvas) {
-    enableCanvas();
+if (canvas) {
+  enableCanvas();
 
-    Array.from(colors).forEach((color) =>
-      color.addEventListener("click", handleClickColor)
-    );
+  Array.from(colors).forEach((color) =>
+    color.addEventListener("click", handleClickColor)
+  );
 
-    boldRange.addEventListener("input", handleInputRangePencil);
-    mode.addEventListener("click", handleClickMode);
-    eraser.addEventListener("click", handleClickEraser);
-    eraserRange.addEventListener("input", handleInputRangeEraser);
-  }
+  boldRange.addEventListener("input", handleInputRangePencil);
+  mode.addEventListener("click", handleClickMode);
+  eraser.addEventListener("click", handleClickEraser);
+  eraserRange.addEventListener("input", handleInputRangeEraser);
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { handleNewMsg } from "./chat";
 import { handleDisconnected, handleNewuser } from "./notifications";
 import {
@@ -14,11 +15,12 @@ import {
   handleGameEnded,
 } from "./player";
 
+const aSocket = io("/");
 let socket = null;
 
 export const getSocket = () => socket;
 
-export const initSocket = (aSocket) => {
+const initSocket = (aSocket) => {
   const { events } = window;
   socket = aSocket;
   socket.on(events.newUser, handleNewuser);
@@ -34,3 +36,5 @@ export const initSocket = (aSocket) => {
   socket.on(events.painterNotif, handlePainterNotif);
   socket.on(events.gameEnded, handleGameEnded);
 };
+
+initSocket(aSocket);

@@ -1,7 +1,8 @@
-import events from "../events";
-import User from "../model/User";
-
 import passport from "passport";
+
+import User from "../model/User";
+import events from "../events";
+import io from "../server";
 
 export const home = (req, res) => {
   res.render("home", { events: JSON.stringify(events) });
@@ -9,7 +10,7 @@ export const home = (req, res) => {
 
 export const getJoin = (req, res) => {
   try {
-    res.render("join");
+    res.render("join", { events: JSON.stringify(events) });
   } catch (error) {
     console.log(error);
     res.redirect("/");
@@ -42,7 +43,7 @@ export const postJoin = async (req, res, next) => {
 
 export const getLogin = (req, res) => {
   try {
-    res.render("login");
+    res.render("login", { events: JSON.stringify(events) });
   } catch (error) {
     console.log(error);
     res.redirect("/");
@@ -50,11 +51,23 @@ export const getLogin = (req, res) => {
 };
 
 export const postLogin = passport.authenticate("local", {
-  successRedirect: "/",
   failureRedirect: "/login",
 });
 
 export const logout = (req, res) => {
   req.logout();
   res.redirect("/");
+};
+
+export const loginNotify = async (req, res) => {
+  res.redirect("/login");
+  const {
+    user: { id },
+  } = req;
+  const user = await User.findById(id);
+  const username = user.username;
+
+  io.on("connection", (socket) => {
+    socket.broadcast.emit(events.newUser, { username });
+  });
 };

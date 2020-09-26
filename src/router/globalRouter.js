@@ -3,6 +3,7 @@ import {
   getJoin,
   getLogin,
   home,
+  loginNotify,
   logout,
   postJoin,
   postLogin,
@@ -14,7 +15,7 @@ const globalRouter = express.Router();
 globalRouter.get("/", home);
 
 globalRouter.get("/login", getLogin);
-globalRouter.post("/login", postLogin);
+globalRouter.post("/login", postLogin, loginNotify);
 
 globalRouter.get("/join", getJoin);
 globalRouter.post("/join", uploadAvatar, postJoin, postLogin);
