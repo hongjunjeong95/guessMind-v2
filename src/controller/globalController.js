@@ -79,10 +79,17 @@ export const loginNotify = async (req, res) => {
   } = req;
   currentUser = await User.findById(id);
   const username = currentUser.username;
-  // currentUser = user;
 
-  sockets.push({ id: currentUser.id, points: currentUser.points, username });
-  io.emit(events.newUser, { username });
+  io.once("connection", (socket) => {
+    sockets.push({
+      socketId: socket.id,
+      points: currentUser.points,
+      username,
+      id: currentUser.id,
+    });
+    socket.broadcast.emit(events.newUser, { username });
+  });
+  // io.emit(events.newUser, { username });
   sendPlayerUpdate();
   res.redirect("/login");
 };

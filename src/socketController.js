@@ -1,4 +1,3 @@
-import { logoutUser } from "./controller/globalController";
 import events from "./events";
 
 import { chooseWord } from "./words";
@@ -18,7 +17,7 @@ export const socketController = (socket, io) => {
     superBroadcast(events.gameStarted);
     painter = choosePainter();
     word = chooseWord();
-    io.to(painter.id).emit(events.painterNotif, { word });
+    io.to(painter.socketId).emit(events.painterNotif, { word });
   };
 
   const addPoints = (id) => {
