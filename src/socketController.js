@@ -36,11 +36,11 @@ export const socketController = (socket, io) => {
     startGame();
   });
 
-  socket.on(events.sendMsg, ({ message }) => {
+  socket.on(events.sendMsg, ({ message, username }) => {
     if (word === message) {
       addPoints(socket.id);
     }
-    broadcast(events.newMsg, { message, username: socket.username });
+    broadcast(events.newMsg, { message, username });
   });
   socket.on(events.beginPath, ({ x, y, size }) =>
     broadcast(events.beganPath, { x, y, size })

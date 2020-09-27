@@ -11,13 +11,19 @@ const endGame = () => {
   superBroadcast(events.gameEnded);
 };
 
+let currentUser = null;
+
 export let logoutUser = null;
 
 export const home = async (req, res) => {
-  res.render("home", { events: JSON.stringify(events), users: sockets });
+  const JSONUser = JSON.stringify(currentUser);
+  res.render("home", {
+    events: JSON.stringify(events),
+    users: sockets,
+    JSONUser,
+  });
 
   io.once("connection", () => {
-    console.log("homenome");
     sendPlayerUpdate();
   });
 };
@@ -54,7 +60,7 @@ export const postJoin = async (req, res, next) => {
   }
 };
 
-export const getLogin = (req, res) => {
+export const getLogin = async (req, res) => {
   try {
     res.render("login", { events: JSON.stringify(events) });
   } catch (error) {
@@ -71,15 +77,13 @@ export const loginNotify = async (req, res) => {
   const {
     user: { id },
   } = req;
-  const user = await User.findById(id);
-  const username = user.username;
+  currentUser = await User.findById(id);
+  const username = currentUser.username;
+  // currentUser = user;
 
-  sockets.push({ id: user.id, points: user.points, username });
-
+  sockets.push({ id: currentUser.id, points: currentUser.points, username });
   io.emit(events.newUser, { username });
-
   sendPlayerUpdate();
-
   res.redirect("/login");
 };
 
