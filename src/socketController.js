@@ -22,7 +22,7 @@ export const socketController = (socket, io) => {
 
   const addPoints = (id) => {
     sockets = sockets.map((socket) => {
-      if (socket.id === id) {
+      if (socket.socketId === id) {
         socket.points += 10;
       }
       return socket;
