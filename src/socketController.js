@@ -18,7 +18,10 @@ export const socketController = (socket, io) => {
     superBroadcast(events.gameStarted);
     painter = choosePainter();
     word = chooseWord();
-    io.to(painter.id).emit(events.leaderNotif, { word });
+    console.log(
+      `socket 0:${sockets[0]}, socket 1:${sockets[1]}, painter:${painter.id}`
+    );
+    io.to(painter.id).emit(events.painterNotif, { word });
     // io.to(painter.socketId).emit(events.painterNotif, { word });
   };
 

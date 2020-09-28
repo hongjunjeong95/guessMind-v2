@@ -13,7 +13,6 @@ const fireNotification = (text, color) => {
 };
 
 export const handleNewuser = ({ username }) => {
-  console.log("handleNewUser", username);
   localStorage.setItem(USERNAME, username);
   const text = `${username} just joined!`;
   const color = "rgb(0, 122, 255)";
