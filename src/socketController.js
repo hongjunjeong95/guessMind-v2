@@ -22,12 +22,11 @@ export const socketController = (socket, io) => {
       `socket 0:${sockets[0]}, socket 1:${sockets[1]}, painter:${painter.id}`
     );
     io.to(painter.id).emit(events.painterNotif, { word });
-    // io.to(painter.socketId).emit(events.painterNotif, { word });
   };
 
   const addPoints = (id) => {
     sockets = sockets.map((socket) => {
-      if (socket.socketId === id) {
+      if (socket.id === id) {
         socket.points += 10;
       }
       return socket;
@@ -38,18 +37,13 @@ export const socketController = (socket, io) => {
   socket.on(events.addPlayer, ({ username }) => {
     socket.username = username;
     sockets.push({ id: socket.id, points: currentUser.points, username });
-    console.log(`addPlayer sockets:`, sockets);
     sendPlayerUpdate();
     startGame();
   });
 
   socket.on(events.disconnect, () => {
-    console.log(`disconnect sockets:`, sockets);
     sockets = sockets.filter((aSocket) => aSocket.id != socket.id);
-    console.log(`disconnect sockets:`, sockets);
-    // broadcast(events.newUser, { username: socket.username });
     broadcast(events.disconnected, { username: socket.username });
-    // broadcast(events.disconnected, { nickname: socket.nickname });
     sendPlayerUpdate();
   });
 

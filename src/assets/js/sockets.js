@@ -32,7 +32,6 @@ export const initSocket = (aSocket) => {
   socket.on(events.erased, handleErased);
   socket.on(events.setPenciled, handleSetPenciled);
   socket.on(events.gameStarted, handleGameStarted);
-
   socket.on(events.painterNotif, handlePainterNotif);
   socket.on(events.gameEnded, handleGameEnded);
 };
