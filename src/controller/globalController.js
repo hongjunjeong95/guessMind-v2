@@ -11,7 +11,7 @@ const endGame = () => {
   superBroadcast(events.gameEnded);
 };
 
-let currentUser = null;
+export let currentUser = null;
 
 export let logoutUser = null;
 
@@ -81,15 +81,10 @@ export const loginNotify = async (req, res) => {
   const username = currentUser.username;
 
   io.once("connection", (socket) => {
-    sockets.push({
-      socketId: socket.id,
-      points: currentUser.points,
-      username,
-      id: currentUser.id,
-    });
-    socket.broadcast.emit(events.newUser, { username });
+    console.log("loginNotify");
+    io.to(socket.id).emit(events.newUser, { username });
   });
-  // io.emit(events.newUser, { username });
+
   sendPlayerUpdate();
   res.redirect("/login");
 };
@@ -101,11 +96,10 @@ export const logout = async (req, res) => {
   logoutUser = await User.findById(id);
   const itmeIdx = sockets.findIndex((aSocket) => aSocket.id === logoutUser.id);
   if (itmeIdx > -1) sockets.splice(itmeIdx, 1);
-
   io.emit(events.disconnected, { username: logoutUser.username });
-
   sendPlayerUpdate();
   endGame();
+
   req.logout();
   res.redirect("/");
 };

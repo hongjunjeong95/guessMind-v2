@@ -1,6 +1,8 @@
+/* eslint-disable no-undef */
 import { getSocket } from "./sockets";
 
 const body = document.querySelector("body");
+const USERNAME = "username";
 
 const fireNotification = (text, color) => {
   const notification = document.createElement("div");
@@ -11,8 +13,11 @@ const fireNotification = (text, color) => {
 };
 
 export const handleNewuser = ({ username }) => {
+  console.log("handleNewUser", username);
+  localStorage.setItem(USERNAME, username);
   const text = `${username} just joined!`;
   const color = "rgb(0, 122, 255)";
+
   fireNotification(text, color);
   getSocket().emit(window.events.addPlayer, { username });
 };
