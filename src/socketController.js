@@ -6,6 +6,7 @@ export let sockets = [];
 let painter = null;
 let word = null;
 let timeout = null;
+let inProgress = false;
 
 const choosePainter = () => sockets[Math.floor(Math.random() * sockets.length)];
 
@@ -15,13 +16,19 @@ export const socketController = (socket, io) => {
   const sendPlayerUpdate = () =>
     superBroadcast(events.playerUpdate, { sockets });
   const startGame = () => {
-    superBroadcast(events.gameStarted);
-    painter = choosePainter();
-    word = chooseWord();
-    io.to(painter.id).emit(events.painterNotif, { word });
-    timeout = setTimeout(() => endGame(), 30000);
+    if (sockets.length > 1) {
+      if (inProgress === false) {
+        inProgress = true;
+        superBroadcast(events.gameStarted);
+        painter = choosePainter();
+        word = chooseWord();
+        io.to(painter.id).emit(events.painterNotif, { word });
+        timeout = setTimeout(() => endGame(), 30000);
+      }
+    }
   };
   const endGame = () => {
+    inProgress = false;
     if (timeout !== null) clearTimeout(timeout);
     superBroadcast(events.gameEnded);
     setTimeout(() => startGame(), 2000);

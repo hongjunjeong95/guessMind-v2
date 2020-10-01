@@ -18,7 +18,6 @@ export const handleNewuser = ({ username, loginNotification }) => {
   const color = "rgb(0, 122, 255)";
 
   fireNotification(text, color);
-  console.log(`loginNotification : ${loginNotification}`);
   getSocket().emit(window.events.addPlayer, { username, loginNotification });
 };
 
