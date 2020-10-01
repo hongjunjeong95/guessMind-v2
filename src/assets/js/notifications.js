@@ -12,13 +12,14 @@ const fireNotification = (text, color) => {
   body.appendChild(notification);
 };
 
-export const handleNewuser = ({ username }) => {
+export const handleNewuser = ({ username, loginNotification }) => {
   localStorage.setItem(USERNAME, username);
   const text = `${username} just joined!`;
   const color = "rgb(0, 122, 255)";
 
   fireNotification(text, color);
-  getSocket().emit(window.events.addPlayer, { username });
+  console.log(`loginNotification : ${loginNotification}`);
+  getSocket().emit(window.events.addPlayer, { username, loginNotification });
 };
 
 export const handleDisconnected = ({ username }) => {

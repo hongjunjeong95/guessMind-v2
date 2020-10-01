@@ -79,10 +79,10 @@ export const loginNotify = async (req, res) => {
   } = req;
   currentUser = await User.findById(id);
   const username = currentUser.username;
+  const loginNotification = true;
 
   io.once("connection", (socket) => {
-    console.log("loginNotify");
-    io.to(socket.id).emit(events.newUser, { username });
+    io.to(socket.id).emit(events.newUser, { username, loginNotification });
   });
 
   sendPlayerUpdate();

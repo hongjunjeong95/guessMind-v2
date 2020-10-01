@@ -31,6 +31,9 @@ export const handleNewMsg = ({ message, username }) => {
   appendMsg(message, username);
 };
 
+export const hideChat = () => (sendMsg.style.display = "none");
+export const showChat = () => (sendMsg.style.display = "flex");
+
 if (sendMsg) {
   sendMsg.addEventListener("submit", handleSendMsg);
 }

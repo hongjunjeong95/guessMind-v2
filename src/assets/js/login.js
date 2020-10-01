@@ -8,7 +8,8 @@ const username = localStorage.getItem(USERNAME);
 const aSocket = io("/");
 initSocket(aSocket);
 if (username !== null) {
-  handleNewuser({ username });
+  const loginNotification = false;
+  handleNewuser({ username, loginNotification });
 }
 
 const handleLogOut = (e) => {

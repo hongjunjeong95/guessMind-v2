@@ -1,7 +1,9 @@
+import { hideChat, showChat } from "./chat";
 import {
   disableCanvas,
   enableCanvas,
   hideControls,
+  resetCanvas,
   showControls,
 } from "./paint";
 
@@ -21,12 +23,18 @@ export const handlePlayerUpdate = ({ sockets }) => addPlayers(sockets);
 export const handleGameStarted = () => {
   disableCanvas();
   hideControls();
+  showChat();
+  notif.innerText = "";
 };
 export const handlePainterNotif = ({ word }) => {
   enableCanvas();
   showControls();
+  hideChat();
   notif.innerText = `You are the painter, word: ${word}`;
 };
 export const handleGameEnded = () => {
   notif.innerText = "";
+  disableCanvas();
+  hideControls();
+  resetCanvas();
 };

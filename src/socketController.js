@@ -1,4 +1,3 @@
-import { currentUser } from "./controller/globalController";
 import events from "./events";
 
 import { chooseWord } from "./words";
@@ -6,6 +5,7 @@ import { chooseWord } from "./words";
 export let sockets = [];
 let painter = null;
 let word = null;
+let timeout = null;
 
 const choosePainter = () => sockets[Math.floor(Math.random() * sockets.length)];
 
@@ -18,10 +18,13 @@ export const socketController = (socket, io) => {
     superBroadcast(events.gameStarted);
     painter = choosePainter();
     word = chooseWord();
-    console.log(
-      `socket 0:${sockets[0]}, socket 1:${sockets[1]}, painter:${painter.id}`
-    );
     io.to(painter.id).emit(events.painterNotif, { word });
+    timeout = setTimeout(() => endGame(), 30000);
+  };
+  const endGame = () => {
+    if (timeout !== null) clearTimeout(timeout);
+    superBroadcast(events.gameEnded);
+    setTimeout(() => startGame(), 2000);
   };
 
   const addPoints = (id) => {
@@ -32,26 +35,37 @@ export const socketController = (socket, io) => {
       return socket;
     });
     sendPlayerUpdate();
+    endGame();
   };
 
-  socket.on(events.addPlayer, ({ username }) => {
+  socket.on(events.addPlayer, ({ username, loginNotification }) => {
     socket.username = username;
-    sockets.push({ id: socket.id, points: currentUser.points, username });
+    sockets.push({ id: socket.id, points: 0, username });
     sendPlayerUpdate();
-    startGame();
+    if (!loginNotification) setTimeout(() => startGame(), 2000);
   });
 
   socket.on(events.disconnect, () => {
     sockets = sockets.filter((aSocket) => aSocket.id != socket.id);
+    // if (sockets.length === 1) {
+    //   endGame();
+    // } else if (painter) {
+    //   if (socket.id === painter.id) {
+    //     endGame();
+    //   }
+    // }
     broadcast(events.disconnected, { username: socket.username });
     sendPlayerUpdate();
   });
 
   socket.on(events.sendMsg, ({ message, username }) => {
     if (word === message) {
+      superBroadcast(events.newMsg, {
+        message: `Winner is ${socket.username}, word was: ${word}`,
+        username: "Bot",
+      });
       addPoints(socket.id);
-    }
-    broadcast(events.newMsg, { message, username });
+    } else broadcast(events.newMsg, { message, username });
   });
   socket.on(events.beginPath, ({ x, y, size }) =>
     broadcast(events.beganPath, { x, y, size })
